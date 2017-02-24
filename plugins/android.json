@@ -7,10 +7,10 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
+        "cordova-plugin-ms-azure-mobile-apps": {
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         },
-        "cordova-plugin-ms-azure-mobile-apps": {
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     },
