@@ -109,4 +109,7 @@
   <plugin name="cordova-plugin-ms-azure-mobile-apps" spec="~2.0.0" />
   <plugin name="cordova-plugin-inappbrowser" version="1.5.0" />
   <plugin name="cordova-sqlite-storage" version="1.4.8" />
+  <plugin name="phonegap-plugin-push" version="1.9.4" src="https://github.com/phonegap/phonegap-plugin-push">
+    <variable name="SENDER_ID" value="367537270291" />
+  </plugin>
 </widget>

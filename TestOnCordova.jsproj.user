@@ -4,4 +4,7 @@
     <DebuggerFlavor>AndroidEmulator</DebuggerFlavor>
     <AndroidEmulatorID>0095900D-83BB-46BD-8AEB-1650B9BF7508;VS Emulator 5.5" Marshmallow (6.0.0) XXXHDPI Phone</AndroidEmulatorID>
   </PropertyGroup>
+  <PropertyGroup>
+    <ReferenceCachePath>C:\Users\mdaumi\AppData\Local\Temp\hvob1ewv_TestOnCordova_refcache</ReferenceCachePath>
+  </PropertyGroup>
 </Project>

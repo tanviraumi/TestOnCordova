@@ -27,7 +27,7 @@
 
     // Set useOfflineSync to true to use tables from local store.
     // Set useOfflineSync to false to use tables on the server.
-    var useOfflineSync = false;
+    var useOfflineSync = true;
 
     // Add an event listener to call our initialization routine when the host is ready
     document.addEventListener('deviceready', onDeviceReady, false);
@@ -46,7 +46,55 @@
         } else {
             setup();
         }
+        registerForPushNotifications();
     }
+
+
+    // Register for Push Notifications. Requires that phonegap-plugin-push be installed.
+    var pushRegistration = null;
+    function registerForPushNotifications() {
+        pushRegistration = PushNotification.init({
+            android: { senderID: '367537270291' },
+            ios: { alert: 'true', badge: 'true', sound: 'true' },
+            wns: {}
+        });
+
+        // Handle the registration event.
+        pushRegistration.on('registration', function (data) {
+            // Get the native platform of the device.
+            var platform = device.platform;
+            // Get the handle returned during registration.
+            var handle = data.registrationId;
+            // Set the device-specific message template.
+            if (platform == 'android' || platform == 'Android') {
+                // Register for GCM notifications.
+                client.push.register('gcm', handle, {
+                    mytemplate: { body: { data: { message: "{$(messageParam)}" } } }
+                });
+            } else if (device.platform === 'iOS') {
+                // Register for notifications.
+                client.push.register('apns', handle, {
+                    mytemplate: { body: { aps: { alert: "{$(messageParam)}" } } }
+                });
+            } else if (device.platform === 'windows') {
+                // Register for WNS notifications.
+                client.push.register('wns', handle, {
+                    myTemplate: {
+                        body: '<toast><visual><binding template="ToastText01"><text id="1">$(messageParam)</text></binding></visual></toast>',
+                        headers: { 'X-WNS-Type': 'wns/toast' }
+                    }
+                });
+            }
+        });
+
+        pushRegistration.on('notification', function (data, d2) {
+            alert('Push Received: ' + data.message);
+        });
+
+        pushRegistration.on('error', handleError);
+    }
+
+
 
     /**
      * Set up and initialize the local store.

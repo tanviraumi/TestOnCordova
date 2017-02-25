@@ -12,6 +12,10 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "367537270291",
+            "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     },
     "dependent_plugins": {
