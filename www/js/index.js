@@ -54,7 +54,7 @@
     var pushRegistration = null;
     function registerForPushNotifications() {
         pushRegistration = PushNotification.init({
-            android: { senderID: '367537270291' },
+            android: { senderID: '40201669292' },
             ios: { alert: 'true', badge: 'true', sound: 'true' },
             wns: {}
         });
@@ -68,9 +68,16 @@
             // Set the device-specific message template.
             if (platform == 'android' || platform == 'Android') {
                 // Register for GCM notifications.
+                console.log("Register for push notification");
+                console.log(handle);
                 client.push.register('gcm', handle, {
                     mytemplate: { body: { data: { message: "{$(messageParam)}" } } }
+                }).then(function (data) {
+                    console.log("success: " + data);
+                }, function (error) {
+                    console.log(error);
                 });
+                //client.push.register('gcm', handle);
             } else if (device.platform === 'iOS') {
                 // Register for notifications.
                 client.push.register('apns', handle, {
@@ -86,8 +93,10 @@
                 });
             }
         });
+        console.log("Done setting up push");
 
         pushRegistration.on('notification', function (data, d2) {
+            console.log("Push Received");
             alert('Push Received: ' + data.message);
         });
 
@@ -272,7 +281,7 @@
                 complete: false
             }).then(displayItems, handleError);
         }
-
+        console.log("Inserting item");
         textbox.val('').focus();
         event.preventDefault();
     }

@@ -39,7 +39,15 @@
         },
         "is_top_level": true,
         "variables": {
-            "SENDER_ID": "367537270291"
+            "SENDER_ID": "40201669292"
         }
+    },
+    "cordova-plugin-device": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-device"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

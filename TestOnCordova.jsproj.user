@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Android'">
     <DebuggerFlavor>AndroidEmulator</DebuggerFlavor>
-    <AndroidEmulatorID>0095900D-83BB-46BD-8AEB-1650B9BF7508;VS Emulator 5.5" Marshmallow (6.0.0) XXXHDPI Phone</AndroidEmulatorID>
+    <AndroidEmulatorID>AndroidDevice;Device</AndroidEmulatorID>
   </PropertyGroup>
   <PropertyGroup>
     <ReferenceCachePath>C:\Users\mdaumi\AppData\Local\Temp\hvob1ewv_TestOnCordova_refcache</ReferenceCachePath>

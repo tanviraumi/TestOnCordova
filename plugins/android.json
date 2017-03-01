@@ -16,6 +16,9 @@
         "phonegap-plugin-push": {
             "SENDER_ID": "367537270291",
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     },
     "dependent_plugins": {
