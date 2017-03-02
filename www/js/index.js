@@ -29,6 +29,17 @@
     // Set useOfflineSync to false to use tables on the server.
     var useOfflineSync = false;
 
+
+
+    // The ADAL Settings
+    var adal = {
+        authority: 'https://login.windows.net/common',
+        resourceUri: 'https://testoncordova.azurewebsites.net',
+        redirectUri: 'https://testoncordova.azurewebsites.net/.auth/login/done',
+        clientId: '7c87d5bc-5721-4e0d-8464-44a7120a8e6e'
+    };
+
+
     // Add an event listener to call our initialization routine when the host is ready
     document.addEventListener('deviceready', onDeviceReady, false);
 
@@ -50,12 +61,56 @@
 
         // Wire up the button to initialize the application
         $('#loginButton').on('click', function (event) {
-            client.login('aad').then(initializeApp, function (error) {
-                console.error(error);
-                alert('Failed to login!');
+            // Client flow
+            console.log("Start client side auth");
+            event.preventDefault();
+            authenticate(function (data) {
+                console.log(data.accessToken);
+                client.login('aad', { 'access_token': data.accessToken })
+                .then(initializeApp, function (error) {
+                    console.error(error);
+                    alert('Failed to authenticate to ZUMO!');
+                });
+            });            // Commented out server flow
+            //client.login('aad').then(initializeApp, function (error) {
+            //    console.error(error);
+            //    alert('Failed to login!');
+            //});
+        });
+    }
+
+
+    /**
+        * Authenticate with the ADAL Plugin
+        * @param {function} authCompletedCallback the function to call when complete
+    */
+    function authenticate(authCompletedCallback) {
+        console.log("Start Auth.......");
+        adal.context = new Microsoft.ADAL.AuthenticationContext(adal.authority);
+        console.log("Setting up ADAL.......");
+        adal.context.tokenCache.readItems().then(function (items) {
+            console.log("Reading cache");
+            if (items.length > 0) {
+                console.log("Item has stuff");
+                adal.authority = items[0].authority;
+                adal.context = new Microsoft.ADAL.AuthenticationContext(adal.authority);
+            }
+
+            // Attempt to authorize user silently
+            adal.context.acquireTokenSilentAsync(adal.resourceUri, adal.clientId)
+            .then(authCompletedCallback, function (p) {
+                console.log(adal.resourceUri);
+                // We require user cridentials so triggers authentication dialog
+                adal.context.acquireTokenAsync(adal.resourceUri, adal.clientId, adal.redirectUri)
+                .then(authCompletedCallback, function (err) {
+                    console.error('Failed to authenticate via ADAL: ', err);
+                    alert("Failed to authenticate: " + err);
+                });
             });
         });
     }
+
+
 
 
     // Register for Push Notifications. Requires that phonegap-plugin-push be installed.

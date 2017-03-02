@@ -19,6 +19,9 @@
         },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
+        },
+        "cordova-plugin-ms-adal": {
+            "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     },
     "dependent_plugins": {
@@ -26,6 +29,9 @@
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         },
         "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
+        },
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     }
