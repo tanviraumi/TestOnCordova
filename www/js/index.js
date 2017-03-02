@@ -27,7 +27,7 @@
 
     // Set useOfflineSync to true to use tables from local store.
     // Set useOfflineSync to false to use tables on the server.
-    var useOfflineSync = true;
+    var useOfflineSync = false;
 
     // Add an event listener to call our initialization routine when the host is ready
     document.addEventListener('deviceready', onDeviceReady, false);
@@ -47,6 +47,14 @@
             setup();
         }
         registerForPushNotifications();
+
+        // Wire up the button to initialize the application
+        $('#loginButton').on('click', function (event) {
+            client.login('aad').then(initializeApp, function (error) {
+                console.error(error);
+                alert('Failed to login!');
+            });
+        });
     }
 
 
@@ -69,7 +77,6 @@
             if (platform == 'android' || platform == 'Android') {
                 // Register for GCM notifications.
                 console.log("Register for push notification");
-                console.log(handle);
                 client.push.register('gcm', handle, {
                     mytemplate: { body: { data: { message: "{$(messageParam)}" } } }
                 }).then(function (data) {
@@ -156,12 +163,57 @@
         }
 
         // Refresh the todoItems
+        //refreshDisplay();
+
+        // Wire up the UI Event Handler for the Add Item
+        //$('#add-item').submit(addItemHandler);
+        //$('#refresh').on('click', refreshDisplay);
+    }
+
+
+
+    /**
+ * Called after the entry button is clicked to clean up the old HTML and add our HTML
+ */
+    function initializeApp() {
+        $('#wrapper').empty();
+
+        // Replace the wrapper with the main content from the original Todo App
+        var content =
+              '<article>'
+            + '  <header>'
+            + '    <h2>Azure</h2><h1>Mobile Apps</h1>'
+            + '    <form id="add-item">'
+            + '      <button id="refresh">Refresh</button>'
+            + '      <button id="add">Add</button>'
+            + '      <div><input type="text" id="new-item-text" placeholder="Enter new task" /></div>'
+            + '    </form>'
+            + '  </header>'
+            + '  <ul id="todo-items"></ul>'
+            + '  <p id="summary">Initializing...</p>'
+            + '</article>'
+            + '<footer><ul id="errorlog"></ul></footer>';
+        $('#wrapper').html(content);
+
+        // Refresh the todoItems
         refreshDisplay();
 
         // Wire up the UI Event Handler for the Add Item
-        $('#add-item').submit(addItemHandler);
-        $('#refresh').on('click', refreshDisplay);
+        $('#add').on('click', addItemHandler);
+        $('#refresh').on('click', handleRefresh);
     }
+
+
+    /**
+    * Event handler for the refresh button
+    * @event
+    */
+    function handleRefresh(event) {
+        refreshDisplay();
+        event.preventDefault();
+    }
+
+
 
     /**
      * Refresh the display with items from the table.
