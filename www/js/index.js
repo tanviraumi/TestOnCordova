@@ -61,9 +61,8 @@
 
         // Wire up the button to initialize the application
         $('#loginButton').on('click', function (event) {
-            // Client flow
-            console.log("Start client side auth");
             event.preventDefault();
+            /*
             authenticate(function (data) {
                 console.log(data.accessToken);
                 client.login('aad', { 'access_token': data.accessToken })
@@ -71,13 +70,54 @@
                     console.error(error);
                     alert('Failed to authenticate to ZUMO!');
                 });
-            });            // Commented out server flow
-            //client.login('aad').then(initializeApp, function (error) {
-            //    console.error(error);
-            //    alert('Failed to login!');
-            //});
+            });*/
+            /*
+            client.login('facebook').then(initializeApp, function (error) {
+                console.error('Auth failed: ', error);
+                alert('Failed to login!');
+            });*/
+
+
+            client.login('facebook')
+                .then(function () {
+                    callAuthMe(function (result) {
+                        // Log User ID from output
+                        console.log('user Id: ', result[0]["user_id"]);
+                        var userid = result[0]["user_id"];
+                        console.log(userid);
+                        initializeApp();
+                    },
+                    function (msg) {
+                        console.error(msg);
+                    });
+                }, function (msg) {
+                    console.error(msg);
+                });
         });
     }
+
+
+    function callAuthMe(successCallback, failCallback) {
+        var req = new XMLHttpRequest();
+        req.open("GET", "https://testoncordova.azurewebsites.net/.auth/me", true);
+
+        // Here's the secret sauce: X-ZUMO-AUTH
+        req.setRequestHeader('X-ZUMO-AUTH', client.currentUser.mobileServiceAuthenticationToken);
+
+        req.onload = function (e) {
+            if (e.target.status >= 200 && e.target.status < 300) {
+                successCallback(JSON.parse(e.target.response));
+                return;
+            }
+            failCallback('Data request failed. Status ' + e.target.status + ' ' + e.target.response);
+        };
+
+        req.onerror = function (e) {
+            failCallback('Data request failed: ' + e.error);
+        }
+        req.send();
+    }
+
 
 
     /**
@@ -133,7 +173,7 @@
                 // Register for GCM notifications.
                 console.log("Register for push notification");
                 client.push.register('gcm', handle, {
-                    mytemplate: { body: { data: { message: "{$(messageParam)}" } } }
+                    mytemplate: { body: { data: { message: "{$(messageParam)}", table: "{$(tableParam)}" } }, tags: ["tanviraumi@gmail.com"] }
                 }).then(function (data) {
                     console.log("success: " + data);
                 }, function (error) {
@@ -159,6 +199,7 @@
 
         pushRegistration.on('notification', function (data, d2) {
             console.log("Push Received");
+            var tableName = data.additionalData.table;
             alert('Push Received: ' + data.message);
         });
 
@@ -231,6 +272,7 @@
  * Called after the entry button is clicked to clean up the old HTML and add our HTML
  */
     function initializeApp() {
+        console.log('client.currentUser.userId: ', client.currentUser.userId);
         $('#wrapper').empty();
 
         // Replace the wrapper with the main content from the original Todo App
