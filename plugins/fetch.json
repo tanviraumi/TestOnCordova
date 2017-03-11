@@ -65,5 +65,17 @@
         },
         "is_top_level": false,
         "variables": {}
+    },
+    "cordova-plugin-facebook4": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/jeduan/cordova-plugin-facebook4",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {
+            "APP_ID": "1568075413222577",
+            "APP_NAME": "Test­O­n­C­o­r­dova"
+        }
     }
 }

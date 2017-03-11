@@ -27,7 +27,7 @@
 
     // Set useOfflineSync to true to use tables from local store.
     // Set useOfflineSync to false to use tables on the server.
-    var useOfflineSync = false;
+    var useOfflineSync = true;
 
 
 
@@ -77,7 +77,7 @@
                 alert('Failed to login!');
             });*/
 
-
+            /*
             client.login('facebook')
                 .then(function () {
                     callAuthMe(function (result) {
@@ -92,8 +92,27 @@
                     });
                 }, function (msg) {
                     console.error(msg);
-                });
-        });
+                });*/
+
+                var fbLoginSuccess = function (userData) {
+                    console.log("UserInfo: ", userData);
+                    facebookConnectPlugin.getAccessToken(function (token) {
+                        console.log("Token: " + token);
+                        client.login('facebook', { 'access_token': token })
+                        .then(initializeApp, function (error) {
+                            console.error(error);
+                            alert('Failed to authenticate to ZUMO!');
+                        });
+                    });
+                }
+
+                facebookConnectPlugin.login(["public_profile"], fbLoginSuccess,
+                  function (error) {
+                      console.error(error)
+                  }
+                );
+
+            });
     }
 
 

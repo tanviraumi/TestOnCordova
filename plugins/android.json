@@ -22,6 +22,11 @@
         },
         "cordova-plugin-ms-adal": {
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "1568075413222577",
+            "APP_NAME": "Test­O­n­C­o­r­dova",
+            "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     },
     "dependent_plugins": {
