@@ -62,55 +62,61 @@
         // Wire up the button to initialize the application
         $('#loginButton').on('click', function (event) {
             event.preventDefault();
-            /*
-            authenticate(function (data) {
-                console.log(data.accessToken);
-                client.login('aad', { 'access_token': data.accessToken })
-                .then(initializeApp, function (error) {
-                    console.error(error);
-                    alert('Failed to authenticate to ZUMO!');
-                });
-            });*/
-            /*
-            client.login('facebook').then(initializeApp, function (error) {
-                console.error('Auth failed: ', error);
-                alert('Failed to login!');
-            });*/
 
-            /*
-            client.login('facebook')
+            var fbLoginSuccess = function (userData) {
+                console.log("UserInfo: ", userData);
+                console.log("Token: " + userData.authResponse.accessToken);
+
+                client.login('facebook', { 'access_token': userData.authResponse.accessToken })
                 .then(function () {
                     callAuthMe(function (result) {
                         // Log User ID from output
                         console.log('user Id: ', result[0]["user_id"]);
                         var userid = result[0]["user_id"];
                         console.log(userid);
+
+                        NativeStorage.setItem("currentUser", client.currentUser,
+                            function (s) {
+                                console.log("Setting user");
+                            },
+                            function (f) {
+                                console.log("Error setting user");
+                            });
+
+
                         initializeApp();
                     },
                     function (msg) {
                         console.error(msg);
                     });
-                }, function (msg) {
-                    console.error(msg);
-                });*/
+                });
+            }
 
-                var fbLoginSuccess = function (userData) {
-                    console.log("UserInfo: ", userData);
-                    facebookConnectPlugin.getAccessToken(function (token) {
-                        console.log("Token: " + token);
-                        client.login('facebook', { 'access_token': token })
-                        .then(initializeApp, function (error) {
-                            console.error(error);
-                            alert('Failed to authenticate to ZUMO!');
-                        });
-                    });
-                }
+            NativeStorage.getItem("currentUser",
+                function (user) {
+                    console.log("Found user");
+                    client.currentUser = user;
+                    var decoded = jwt_decode(user.mobileServiceAuthenticationToken);
 
-                facebookConnectPlugin.login(["public_profile"], fbLoginSuccess,
-                  function (error) {
-                      console.error(error)
-                  }
-                );
+                    if (Date.now() < decoded.exp * 1000) {  // Init app if token not expired yet
+                        initializeApp();
+                    } else {    // Else login again.
+                        facebookConnectPlugin.login(["public_profile", "email"], fbLoginSuccess,
+                            function (error) {
+                                console.error(error)
+                            }
+                        );
+                    }
+                    
+                },
+                function (error) {
+                    console.log('Error: ', error.code);
+                    facebookConnectPlugin.login(["public_profile", "email"], fbLoginSuccess,
+                        function (error) {
+                            console.error(error)
+                        }
+                    );
+                });
 
             });
     }
@@ -291,7 +297,8 @@
  * Called after the entry button is clicked to clean up the old HTML and add our HTML
  */
     function initializeApp() {
-        console.log('client.currentUser.userId: ', client.currentUser.userId);
+        var uid = client.currentUser.userId;
+        console.log('client.currentUser.userId: ', uid);
         $('#wrapper').empty();
 
         // Replace the wrapper with the main content from the original Todo App

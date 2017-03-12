@@ -27,6 +27,9 @@
             "APP_ID": "1568075413222577",
             "APP_NAME": "Test­O­n­C­o­r­dova",
             "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
+        },
+        "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "com.microsoft.azure.mobileapps.TestOnCordova"
         }
     },
     "dependent_plugins": {

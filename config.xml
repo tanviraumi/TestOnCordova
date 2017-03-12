@@ -118,4 +118,6 @@
     <variable name="APP_ID" value="1568075413222577" />
     <variable name="APP_NAME" value="Test­O­n­C­o­r­dova" />
   </plugin>
+  <plugin name="cordova-plugin-compat" version="1.1.0" />
+  <plugin name="cordova-plugin-nativestorage" version="2.2.1" src="https://github.com/TheCocoaProject/cordova-plugin-nativestorage" />
 </widget>
